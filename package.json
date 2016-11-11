@@ -1,7 +1,7 @@
 {
   "name": "expressjs-plus",
   "version": "0.0.1",
-  "description": "Adds much needed functionalities to express js",
+  "description": "A pluggable expansion to express js aimed at adding much needed features and helpers.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

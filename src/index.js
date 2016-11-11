@@ -4,7 +4,9 @@
 import errorHandler from 'errorhandler'
 
 /**
- * @example //Usage
+ * @example
+ * // Usage
+ * ```js
  * var express = require('express');
  * var bodyParser = require('body-parser');
  * var userHandler = function(param, paramsArray, req){
@@ -21,9 +23,11 @@ import errorHandler from 'errorhandler'
  * app.use(appPlus.GMV(regularFunction), appPlus.responder);
  *
  * appPlus.setErrorHandlers();
+ * ```
  * @param {Object} app express app object
  * @param {Array} passedParamHandlers array of functions in the format of @see {@link lastHandler}
  * @example //this is an example of a paramHandler function that is interested in the user parameter
+ * ```js
  * function userHandler(param, paramsArray, req){
  *      if(param === 'user'){
  *          paramsArray.push(req.user);
@@ -32,6 +36,7 @@ import errorHandler from 'errorhandler'
  *          return false;
  *      }
  *  }
+ *  ```
  * @param {Array} passedErrorHandlers array of middlewares
  * @constructor
  */
@@ -61,6 +66,7 @@ export function ExpressPlus(app, passedParamHandlers = [], passedErrorHandlers =
      * @param {Function} func the function to be converted
      * @return function
      * @example
+     * ```js
      * function regularFunc(someVar, cb){
      *  console.log(someVar);
      *  return cb(null, {response: someVar+="addedString"});
@@ -73,6 +79,7 @@ export function ExpressPlus(app, passedParamHandlers = [], passedErrorHandlers =
      *  res.locals.response = someVar+="addedString";
      *  return next();
      * }
+     * ```
      */
     this.getMiddlewareVersion = this.GMV = (func) => {
         if (!isFunction(func)) throw new Error('Non-function passed');

@@ -28,13 +28,9 @@
 | passedErrorHandlers | <code>Array</code> | array of middlewares |
 
 **Example**  
-```js
-//Usagevar express = require('express');var bodyParser = require('body-parser');var userHandler = function(param, paramsArray, req){ if(param !== 'user') return false; paramsArray.push(req.user); return true;};var app = express()app.use(bodyParser.json());var appPlus = new ExpressPlus(app, [userHandler], []);var regularFunction = function(user, id, cb){ return cb(null, { response: {user: user, id: id}, status: 200 });};app.use(appPlus.GMV(regularFunction), appPlus.responder);appPlus.setErrorHandlers();
-```
+// Usage```jsvar express = require('express');var bodyParser = require('body-parser');var userHandler = function(param, paramsArray, req){ if(param !== 'user') return false; paramsArray.push(req.user); return true;};var app = express()app.use(bodyParser.json());var appPlus = new ExpressPlus(app, [userHandler], []);var regularFunction = function(user, id, cb){ return cb(null, { response: {user: user, id: id}, status: 200 });};app.use(appPlus.GMV(regularFunction), appPlus.responder);appPlus.setErrorHandlers();```
 **Example**  
-```js
-//this is an example of a paramHandler function that is interested in the user parameterfunction userHandler(param, paramsArray, req){     if(param === 'user'){         paramsArray.push(req.user);         return true;     }else{         return false;     } }
-```
+//this is an example of a paramHandler function that is interested in the user parameter```jsfunction userHandler(param, paramsArray, req){     if(param === 'user'){         paramsArray.push(req.user);         return true;     }else{         return false;     } } ```
 <a name="ExpressPlus+HTTPError"></a>
 
 ### expressPlus.HTTPError
@@ -63,9 +59,7 @@ Returns a middleware version of the function passed, this function replaces the 
 | func | <code>function</code> | the function to be converted |
 
 **Example**  
-```js
-function regularFunc(someVar, cb){ console.log(someVar); return cb(null, {response: someVar+="addedString"});}var fun = GMV(regularFunc);fun =>function mw(req, res, next){ let someVar = req.query.someVar; console.log(someVar); res.locals.response = someVar+="addedString"; return next();}
-```
+```jsfunction regularFunc(someVar, cb){ console.log(someVar); return cb(null, {response: someVar+="addedString"});}var fun = GMV(regularFunc);fun =>function mw(req, res, next){ let someVar = req.query.someVar; console.log(someVar); res.locals.response = someVar+="addedString"; return next();}```
 <a name="ExpressPlus+setErrorHandlers"></a>
 
 ### expressPlus.setErrorHandlers()
