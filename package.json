@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "compile": "rimraf lib/* && babel src/index.js --out-file lib/index.js",
-    "prepublish": "npm run compile",
+    "build": "npm run compile",
     "generateDoc": "node src/docGenerator.js"
   },
   "keywords": [
@@ -33,6 +33,19 @@
     "babel-plugin-transform-object-assign": "^6.8.0",
     "rimraf": "^2.5.4",
     "should": "^11.1.1",
-    "sinon": "^1.17.6"
+    "sinon": "^1.17.6",
+    "pre-git": "^3.10.0"
+  },
+  "config": {
+    "pre-git": {
+      "pre-commit": [
+        "npm test",
+        "npm run build"
+      ],
+      "pre-push": [],
+      "post-commit": [],
+      "post-checkout": [],
+      "post-merge": []
+    }
   }
 }
