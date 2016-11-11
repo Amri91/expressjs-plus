@@ -19,7 +19,7 @@
 
 <a name="new_ExpressPlus_new"></a>
 
-### new ExpressPlus(app, passedParamHandlers, passedErrorHandlers)
+### new exports.ExpressPlus(app, passedParamHandlers, passedErrorHandlers)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -28,29 +28,32 @@
 | passedErrorHandlers | <code>Array</code> | array of middlewares |
 
 **Example**  
-// Usage
-
+// Usage
 ```js
-var express = require('express');
-var bodyParser = require('body-parser');
-var userHandler = function(param, paramsArray, req){
+ var express = require('express');
+ var ExpressPlus = require('expressjs-plus').ExpressPlus;
+ var app = express();
+ var userHandler = function(param, paramsArray, req){
     if(param !== 'user') return false;
-    paramsArray.push(req.user);
+    paramsArray.push("USER WAS FOUND!");
     return true;
 };
-var app = express()
-app.use(bodyParser.json());
-var appPlus = new ExpressPlus(app, [userHandler], []);
-var regularFunction = function(user, id, cb){
+ // you can do a lot more with handlers, libraries like passport.js uses
+ // req.user, you can make a handler for that!
+ var appPlus = new ExpressPlus(app, [userHandler], []);
+ var regularFunction = function(user, id, cb){
     return cb(null, { response: {user: user, id: id}, status: 200 });
 };
-app.use(appPlus.GMV(regularFunction), appPlus.responder);
+ app.use(appPlus.GMV(regularFunction), appPlus.responder);
 
-appPlus.setErrorHandlers();
+ appPlus.setErrorHandlers();
+
+ app.listen(3001, function(){
+    console.log('Listening!');
+});
 ```
 **Example**  
-//this is an example of a paramHandler function that is interested in the user parameter
-
+//this is an example of a paramHandler function that is interested in the user parameter
 ```js
 function userHandler(param, paramsArray, req){
     if(param === 'user'){
@@ -79,8 +82,7 @@ Generic error handler
 <a name="ExpressPlus+getMiddlewareVersion"></a>
 
 ### expressPlus.getMiddlewareVersion ⇒
-Returns a middleware version of the function passed, this function replaces the last parameter with a callback
-function to work with express js.
+Returns a middleware version of the function passed, this function replaces the last parameter with a callbackfunction to work with express js.
 
 **Kind**: instance property of <code>[ExpressPlus](#ExpressPlus)</code>  
 **Returns**: function  
@@ -132,8 +134,7 @@ Handles responses. Other middlewares need to use locals to pass data to this fun
 <a name="ExpressPlus+defaultCbWithResponse"></a>
 
 ### expressPlus.defaultCbWithResponse(cb, [status])
-Handles callbacks and puts response & status in the second callback argument if successful
-Replace your callback with this if appropriate.
+Handles callbacks and puts response & status in the second callback argument if successfulReplace your callback with this if appropriate.
 
 **Kind**: instance method of <code>[ExpressPlus](#ExpressPlus)</code>  
 
@@ -145,8 +146,7 @@ Replace your callback with this if appropriate.
 <a name="ExpressPlus+defaultCb"></a>
 
 ### expressPlus.defaultCb(cb, [resource])
-Handles callbacks.
-Replace your callback with this if appropriate.
+Handles callbacks.Replace your callback with this if appropriate.
 
 **Kind**: instance method of <code>[ExpressPlus](#ExpressPlus)</code>  
 
@@ -169,16 +169,11 @@ Enables sending array of middlewares to app.use
 <a name="ExpressPlus..lastHandler"></a>
 
 ### ExpressPlus~lastHandler(param, paramsArray, req) ⇒ <code>boolean</code>
-Default parameter handler used in getMiddlewareVersion.
-Every parameter is passed to a set of functions to be handled, this is the last handler that just pushes
-the parameter to the paramsArray.
+Default parameter handler used in getMiddlewareVersion.Every parameter is passed to a set of functions to be handled, this is the last handler that just pushesthe parameter to the paramsArray.
 
 **Kind**: inner method of <code>[ExpressPlus](#ExpressPlus)</code>  
-**Returns**: <code>boolean</code> - if true is returned, the parameter will be considered handled and the function [GMV](GMV) will
-move on to the next parameter. if false is returned, the next handler on the list will attempt to handle the
-parameter until this methods turn comes, which will always return true  
-**See**: [dataHandler](dataHandler) this function is a more real example of a parameter handler, it is used to integrate
-with another library [https://www.npmjs.com/package/simple-express-validator](https://www.npmjs.com/package/simple-express-validator)  
+**Returns**: <code>boolean</code> - if true is returned, the parameter will be considered handled and the function [GMV](GMV) willmove on to the next parameter. if false is returned, the next handler on the list will attempt to handle theparameter until this methods turn comes, which will always return true  
+**See**: [dataHandler](dataHandler) this function is a more real example of a parameter handler, it is used to integratewith another library [https://www.npmjs.com/package/simple-express-validator](https://www.npmjs.com/package/simple-express-validator)  
 
 | Param | Type | Description |
 | --- | --- | --- |
