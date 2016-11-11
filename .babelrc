@@ -1,4 +1,4 @@
 {
-  "plugins": ["transform-runtime"],
+  "plugins": ["transform-runtime", "transform-object-assign"],
   "presets": ["es2015", "stage-0"]
 }
