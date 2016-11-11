@@ -8,22 +8,27 @@ import errorHandler from 'errorhandler'
  * // Usage
  *
 ```js
-var express = require('express');
-var bodyParser = require('body-parser');
-var userHandler = function(param, paramsArray, req){
+ var express = require('express');
+ var ExpressPlus = require('expressjs-plus').ExpressPlus;
+ var app = express();
+ var userHandler = function(param, paramsArray, req){
     if(param !== 'user') return false;
-    paramsArray.push(req.user);
+    paramsArray.push("USER WAS FOUND!");
     return true;
 };
-var app = express()
-app.use(bodyParser.json());
-var appPlus = new ExpressPlus(app, [userHandler], []);
-var regularFunction = function(user, id, cb){
+ // you can do a lot more with handlers, libraries like passport.js uses
+ // req.user, you can make a handler for that!
+ var appPlus = new ExpressPlus(app, [userHandler], []);
+ var regularFunction = function(user, id, cb){
     return cb(null, { response: {user: user, id: id}, status: 200 });
 };
-app.use(appPlus.GMV(regularFunction), appPlus.responder);
+ app.use(appPlus.GMV(regularFunction), appPlus.responder);
 
-appPlus.setErrorHandlers();
+ appPlus.setErrorHandlers();
+
+ app.listen(3001, function(){
+    console.log('Listening!');
+});
 ```
 
  * @param {Object} app express app object
