@@ -6,37 +6,41 @@ import errorHandler from 'errorhandler'
 /**
  * @example
  * // Usage
- * ```js
- * var express = require('express');
- * var bodyParser = require('body-parser');
- * var userHandler = function(param, paramsArray, req){
- *  if(param !== 'user') return false;
- *  paramsArray.push(req.user);
- *  return true;
- * };
- * var app = express()
- * app.use(bodyParser.json());
- * var appPlus = new ExpressPlus(app, [userHandler], []);
- * var regularFunction = function(user, id, cb){
- *  return cb(null, { response: {user: user, id: id}, status: 200 });
- * };
- * app.use(appPlus.GMV(regularFunction), appPlus.responder);
  *
- * appPlus.setErrorHandlers();
- * ```
+```js
+var express = require('express');
+var bodyParser = require('body-parser');
+var userHandler = function(param, paramsArray, req){
+    if(param !== 'user') return false;
+    paramsArray.push(req.user);
+    return true;
+};
+var app = express()
+app.use(bodyParser.json());
+var appPlus = new ExpressPlus(app, [userHandler], []);
+var regularFunction = function(user, id, cb){
+    return cb(null, { response: {user: user, id: id}, status: 200 });
+};
+app.use(appPlus.GMV(regularFunction), appPlus.responder);
+
+appPlus.setErrorHandlers();
+```
+
  * @param {Object} app express app object
  * @param {Array} passedParamHandlers array of functions in the format of @see {@link lastHandler}
  * @example //this is an example of a paramHandler function that is interested in the user parameter
- * ```js
- * function userHandler(param, paramsArray, req){
- *      if(param === 'user'){
- *          paramsArray.push(req.user);
- *          return true;
- *      }else{
- *          return false;
- *      }
- *  }
- *  ```
+ *
+```js
+function userHandler(param, paramsArray, req){
+    if(param === 'user'){
+        paramsArray.push(req.user);
+        return true;
+    }else{
+        return false;
+    }
+}
+```
+
  * @param {Array} passedErrorHandlers array of middlewares
  * @constructor
  */
