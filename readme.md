@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Amri91/expressjs-plus.svg?branch=master)](https://travis-ci.org/Amri91/expressjs-plus)
+
 <a name="ExpressPlus"></a>
 
 ## ExpressPlus
@@ -203,3 +205,12 @@ Default parameter handler used in getMiddlewareVersion.Every parameter is passe
 | req | <code>Object</code> | express request object that is used in middlewares, useful for accessing req.params, req.query, etc |
 | res | <code>Object</code> | exppress response object that is used in middlewares, could be useful if you want to access res.locals |
 
+
+# Testing
+```
+npm test
+```
+
+* * *
+
+&copy; 2016 A Amri a.amri.91@gmail.com
