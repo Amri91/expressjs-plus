@@ -1,5 +1,66 @@
 [![Build Status](https://travis-ci.org/Amri91/expressjs-plus.svg?branch=master)](https://travis-ci.org/Amri91/expressjs-plus)
 
+## Usage
+``` js
+var express = require('express');
+var ExpressPlus = require('expressjs-plus').ExpressPlus;
+var app = express();
+// simple handler example
+var userHandler = function (param, paramsArray, req, res) {
+    if (param !== 'user') return false;
+    paramsArray.push("USER WAS FOUND!");
+    return true;
+};
+
+// this handler allows you to pass res.locals properties between your middlewares seemingly,
+// it the parameter was found in locals, it attaches it to paramsArray.
+var resLocalsHandler = function (param, paramsArray, req, res) {
+    if (param in res.locals) {
+        paramsArray.push(res.locals[param]);
+        return true;
+    } else return false;
+};
+var appPlus = new ExpressPlus(app, [userHandler, resLocalsHandler], []);
+var regularFunction = function (user, id, cb) {
+    return cb(null, {response: {user: user, id: id}, status: 200, resLocalsVar: "passVar"});
+};
+
+// resLocalsVar was passed in a previous method
+var regularFunction2 = function (resLocalsVar, user, id, cb) {
+    // now you can have access to it
+    console.log(resLocalsVar);
+    return cb(null);
+};
+
+// the responder at the end will use res.locals.status and res.locals.response to issue an HTTP response
+app.use(appPlus.GMV(regularFunction), appPlus.GMV(regularFunction2), appPlus.responder);
+
+// adds error handlers, it will add a default error handler along with the list of error handlers passed
+// in this case, no error handlers were passed
+appPlus.setErrorHandlers();
+
+app.listen(3001, function () {
+    console.log('Listening!');
+});
+```
+
+## Another example for a paramHandler
+```js
+function userHandler(param, paramsArray, req){
+    if(param === 'user'){
+        paramsArray.push(req.user);
+        return true;
+    }else{
+        return false;
+    }
+}
+```
+
+## Install
+```
+npm install expressjs-plus
+```
+
 <a name="ExpressPlus"></a>
 
 ## ExpressPlus
@@ -32,60 +93,8 @@ This function abstracts the constraints of express middleware signature and allo
 | passedErrorHandlers | <code>Array</code> | array of middlewares |
 
 **Example**  
-// Usage
 ```js
- var express = require('express');
- var ExpressPlus = require('expressjs-plus').ExpressPlus;
- var app = express();
- // simple handler example
- var userHandler = function(param, paramsArray, req, res){
-    if(param !== 'user') return false;
-    paramsArray.push("USER WAS FOUND!");
-    return true;
-};
-
- // this handler allows you to pass res.locals properties between your middlewares seemingly,
- // it the parameter was found in locals, it attaches it to paramsArray.
- var resLocalsHandler = function(param, paramsArray, req, res){
-    if(param in res.locals){
-        paramsArray.push(res.locals[param]);
-        return true;
-    }else return false;
-};
- var appPlus = new ExpressPlus(app, [userHandler, resLocalsHandler], []);
- var regularFunction = function(user, id, cb){
-    return cb(null, { response: {user: user, id: id}, status: 200, resLocalsVar: "passVar" });
-};
-
- // resLocalsVar was passed in a previous method
- var regularFunction2 = function(resLocalsVar, user, id, cb){
- // now you can have access to it
-    console.log(resLocalsVar);
-    return cb(null);
-};
-
- // the responder at the end will use res.locals.status and res.locals.response to issue an HTTP response
- app.use(appPlus.GMV(regularFunction), appPlus.GMV(regularFunction2), appPlus.responder);
-
- // adds error handlers, it will add a default error handler along with the list of error handlers passed
- // in this case, no error handlers were passed
- appPlus.setErrorHandlers();
-
- app.listen(3001, function(){
-    console.log('Listening!');
-});
-```
-**Example**  
-//this is an example of a paramHandler function that is interested in the user parameter
-```js
-function userHandler(param, paramsArray, req){
-    if(param === 'user'){
-        paramsArray.push(req.user);
-        return true;
-    }else{
-        return false;
-    }
-}
+//this is an example of a paramHandler function that is interested in the user parameter
 ```
 <a name="ExpressPlus+HTTPError"></a>
 

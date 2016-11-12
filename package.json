@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "compile": "rimraf lib/* && babel src/index.js --out-file lib/index.js",
+    "compile": "rimraf lib/* && babel --no-comments src --out-file lib/index.js",
     "build": "npm run compile",
     "generateDoc": "jsdoc2md -t jsdoc2md/readme.hbs src/*.js > readme.md"
   },
@@ -18,7 +18,7 @@
     "error-handling"
   ],
   "author": "Abdulrahman Amri",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "errorhandler": "^1.4.3",
     "babel-plugin-transform-object-assign": "^6.8.0",
@@ -30,8 +30,10 @@
     "babel-preset-stage-0": "^6.5.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.15",
     "jsdoc-to-markdown": "^2.0.1",
     "mocha": "^3.1.2",
+    "mocha-lcov-reporter": "^1.2.0",
     "pre-git": "^3.10.0",
     "rimraf": "^2.5.4",
     "should": "^11.1.1",
