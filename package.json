@@ -39,8 +39,10 @@
   "config": {
     "pre-git": {
       "pre-commit": [
-        "npm test",
-        "npm run build"
+        "npm run generateDoc",
+        "npm run build",
+        "git add .",
+        "npm test"
       ],
       "pre-push": [],
       "post-commit": [],

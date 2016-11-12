@@ -41,8 +41,8 @@ This function abstracts the constraints of express middleware signature and allo
     return true;
 };
  var resLocalsHandler = function(param, paramsArray, req, res){
-    if(res.locals.hasOwnProperty(param)){
-        paramsArray.push(res.locals.param);
+    if(param in res.locals){
+        paramsArray.push(res.locals[param]);
         return true;
     }else return false;
 };
