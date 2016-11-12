@@ -24,7 +24,7 @@ describe('#getMiddlewareVersion testing', function() {
         var unsuspectingFunction = function(user, id, cb){
             return cb(null, { response: {user: user, id: id}, status: 123 });
         };
-        var userHandler = function(param, paramsArray, req){
+        var userHandler = function(param, paramsArray, req, res){
             if(param !== 'user') return false;
             paramsArray.push(req.user);
             return true;

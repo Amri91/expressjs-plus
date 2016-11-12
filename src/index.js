@@ -4,6 +4,9 @@
 import errorHandler from 'errorhandler'
 
 /**
+ * This function abstracts the constraints of express middleware signature and allows you to easily pass variables
+ * between middlewares without ugly code. It introduces a neat pattern for passing these variables.
+ *
  * @example
  * // Usage
  *
@@ -11,18 +14,27 @@ import errorHandler from 'errorhandler'
  var express = require('express');
  var ExpressPlus = require('expressjs-plus').ExpressPlus;
  var app = express();
- var userHandler = function(param, paramsArray, req){
+ var userHandler = function(param, paramsArray, req, res){
     if(param !== 'user') return false;
     paramsArray.push("USER WAS FOUND!");
     return true;
 };
- // you can do a lot more with handlers, libraries like passport.js uses
- // req.user, you can make a handler for that!
- var appPlus = new ExpressPlus(app, [userHandler], []);
- var regularFunction = function(user, id, cb){
-    return cb(null, { response: {user: user, id: id}, status: 200 });
+ var resLocalsHandler = function(param, paramsArray, req, res){
+    if(res.locals.hasOwnProperty(param)){
+        paramsArray.push(res.locals.param);
+        return true;
+    }else return false;
 };
- app.use(appPlus.GMV(regularFunction), appPlus.responder);
+ var appPlus = new ExpressPlus(app, [userHandler, resLocalsHandler], []);
+ var regularFunction = function(user, id, cb){
+    return cb(null, { response: {user: user, id: id}, status: 200, resLocalsVar: "passVar" });
+};
+
+ var regularFunction2 = function(resLocalsVar, user, id, cb){
+    console.log(resLocalsVar);
+    return cb(null);
+};
+ app.use(appPlus.GMV(regularFunction), appPlus.GMV(regularFunction2), appPlus.responder);
 
  appPlus.setErrorHandlers();
 
@@ -103,7 +115,7 @@ function mw(req, res, next){
             for (let i = 0; i < params.length; i++) {
                 // looping through every handler, breaking when a handler is successful
                 for (let j = 0; j < paramHandlers.length; j++) {
-                    if (paramHandlers[j](params[i], paramsArray, req)) break
+                    if (paramHandlers[j](params[i], paramsArray, req, res)) break
                 }
             }
             // adding a replacement callback function, using the error first pattern
@@ -206,12 +218,15 @@ function mw(req, res, next){
      * with another library {@link https://www.npmjs.com/package/simple-express-validator}
      * @param {String} param string parameter
      * @param {Array} paramsArray parameter arrays which will be sent to the underlying function of the middleware
-     * @param {Object} req express request object that is used in middlewares
+     * @param {Object} req express request object that is used in middlewares, useful for accessing req.params,
+     * req.query, etc
+     * @param {Object} res exppress response object that is used in middlewares, could be useful if you want to access
+     * res.locals
      * @returns {boolean} if true is returned, the parameter will be considered handled and the function {@link GMV} will
      * move on to the next parameter. if false is returned, the next handler on the list will attempt to handle the
      * parameter until this methods turn comes, which will always return true
      */
-    function lastHandler(param, paramsArray, req) {
+    function lastHandler(param, paramsArray, req, res) {
         paramsArray.push(req.params[param] || req.query[param]);
         return true
     }
