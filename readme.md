@@ -35,11 +35,15 @@ This function abstracts the constraints of express middleware signature and allo
  var express = require('express');
  var ExpressPlus = require('expressjs-plus').ExpressPlus;
  var app = express();
+ // simple handler example
  var userHandler = function(param, paramsArray, req, res){
     if(param !== 'user') return false;
     paramsArray.push("USER WAS FOUND!");
     return true;
 };
+
+ // this handler allows you to pass res.locals properties between your middlewares seemingly,
+ // it the parameter was found in locals, it attaches it to paramsArray.
  var resLocalsHandler = function(param, paramsArray, req, res){
     if(param in res.locals){
         paramsArray.push(res.locals[param]);
@@ -51,12 +55,18 @@ This function abstracts the constraints of express middleware signature and allo
     return cb(null, { response: {user: user, id: id}, status: 200, resLocalsVar: "passVar" });
 };
 
+ // resLocalsVar was passed in a previous method
  var regularFunction2 = function(resLocalsVar, user, id, cb){
+ // now you can have access to it
     console.log(resLocalsVar);
     return cb(null);
 };
+
+ // the responder at the end will use res.locals.status and res.locals.response to issue an HTTP response
  app.use(appPlus.GMV(regularFunction), appPlus.GMV(regularFunction2), appPlus.responder);
 
+ // adds error handlers, it will add a default error handler along with the list of error handlers passed
+ // in this case, no error handlers were passed
  appPlus.setErrorHandlers();
 
  app.listen(3001, function(){
