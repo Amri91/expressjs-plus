@@ -15,11 +15,13 @@
         * [.defaultCb(cb, [resource])](#ExpressPlus+defaultCb)
         * [.useArray(middlewares)](#ExpressPlus+useArray)
     * _inner_
-        * [~lastHandler(param, paramsArray, req)](#ExpressPlus..lastHandler) ⇒ <code>boolean</code>
+        * [~lastHandler(param, paramsArray, req, res)](#ExpressPlus..lastHandler) ⇒ <code>boolean</code>
 
 <a name="new_ExpressPlus_new"></a>
 
 ### new exports.ExpressPlus(app, passedParamHandlers, passedErrorHandlers)
+This function abstracts the constraints of express middleware signature and allows you to easily pass variablesbetween middlewares without ugly code. It introduces a neat pattern for passing these variables.
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -33,18 +35,27 @@
  var express = require('express');
  var ExpressPlus = require('expressjs-plus').ExpressPlus;
  var app = express();
- var userHandler = function(param, paramsArray, req){
+ var userHandler = function(param, paramsArray, req, res){
     if(param !== 'user') return false;
     paramsArray.push("USER WAS FOUND!");
     return true;
 };
- // you can do a lot more with handlers, libraries like passport.js uses
- // req.user, you can make a handler for that!
- var appPlus = new ExpressPlus(app, [userHandler], []);
- var regularFunction = function(user, id, cb){
-    return cb(null, { response: {user: user, id: id}, status: 200 });
+ var resLocalsHandler = function(param, paramsArray, req, res){
+    if(res.locals.hasOwnProperty(param)){
+        paramsArray.push(res.locals.param);
+        return true;
+    }else return false;
 };
- app.use(appPlus.GMV(regularFunction), appPlus.responder);
+ var appPlus = new ExpressPlus(app, [userHandler, resLocalsHandler], []);
+ var regularFunction = function(user, id, cb){
+    return cb(null, { response: {user: user, id: id}, status: 200, resLocalsVar: "passVar" });
+};
+
+ var regularFunction2 = function(resLocalsVar, user, id, cb){
+    console.log(resLocalsVar);
+    return cb(null);
+};
+ app.use(appPlus.GMV(regularFunction), appPlus.GMV(regularFunction2), appPlus.responder);
 
  appPlus.setErrorHandlers();
 
@@ -168,7 +179,7 @@ Enables sending array of middlewares to app.use
 
 <a name="ExpressPlus..lastHandler"></a>
 
-### ExpressPlus~lastHandler(param, paramsArray, req) ⇒ <code>boolean</code>
+### ExpressPlus~lastHandler(param, paramsArray, req, res) ⇒ <code>boolean</code>
 Default parameter handler used in getMiddlewareVersion.Every parameter is passed to a set of functions to be handled, this is the last handler that just pushesthe parameter to the paramsArray.
 
 **Kind**: inner method of <code>[ExpressPlus](#ExpressPlus)</code>  
@@ -179,5 +190,6 @@ Default parameter handler used in getMiddlewareVersion.Every parameter is passe
 | --- | --- | --- |
 | param | <code>String</code> | string parameter |
 | paramsArray | <code>Array</code> | parameter arrays which will be sent to the underlying function of the middleware |
-| req | <code>Object</code> | express request object that is used in middlewares |
+| req | <code>Object</code> | express request object that is used in middlewares, useful for accessing req.params, req.query, etc |
+| res | <code>Object</code> | exppress response object that is used in middlewares, could be useful if you want to access res.locals |
 
