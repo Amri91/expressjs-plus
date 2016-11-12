@@ -92,10 +92,6 @@ This function abstracts the constraints of express middleware signature and allo
 | passedParamHandlers | <code>Array</code> | array of functions in the format of @see [lastHandler](lastHandler) |
 | passedErrorHandlers | <code>Array</code> | array of middlewares |
 
-**Example**  
-```js
-//this is an example of a paramHandler function that is interested in the user parameter
-```
 <a name="ExpressPlus+HTTPError"></a>
 
 ### expressPlus.HTTPError

@@ -8,7 +8,6 @@ import errorHandler from 'errorhandler'
  * between middlewares without ugly code. It introduces a neat pattern for passing these variables.
  * @param {Object} app express app object
  * @param {Array} passedParamHandlers array of functions in the format of @see {@link lastHandler}
- * @example //this is an example of a paramHandler function that is interested in the user parameter
  * @param {Array} passedErrorHandlers array of middlewares
  * @constructor
  */
