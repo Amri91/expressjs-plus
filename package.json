@@ -1,11 +1,11 @@
 {
   "name": "expressjs-plus",
-  "version": "0.1.8",
+  "version": "1.0.0",
   "description": "A pluggable expansion to express js aimed at adding much needed features and helpers.",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "compile": "rimraf lib/* && babel --no-comments src --out-file lib/index.js",
+    "compile": "rimraf lib/* && babel src --out-file lib/index.js",
     "build": "npm run compile",
     "generateDoc": "jsdoc2md -t jsdoc2md/readme.hbs src/*.js > readme.md"
   },

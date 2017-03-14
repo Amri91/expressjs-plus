@@ -185,15 +185,30 @@ function mw(req, res, next){
 // All credits goes to humbletim
 // https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript/31194949#31194949
 // Parses a function and returns an array that contains all of its parameters
+// function $args(func) {
+//     return (func + '')
+//         .replace(/[/][/].*$/mg, '') // strip single-line comments
+//         .replace(/\s+/g, '') // strip white space
+//         .replace(/[/][*][^/*]*[*][/]/g, '') // strip multi-line comments
+//         .split('){', 1)[0].replace(/^[^(]*[(]/, '') // extract the parameters
+//         .replace(/=[^,]+/g, '') // strip any ES6 defaults
+//         .split(',').filter(Boolean); // split & filter [""]
+// }
+
+
+// All credits goes to Jack Allan
+// https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript/31194949#31194949
+// Parses a function and returns an array that contains all of its parametersvar STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+var ARGUMENT_NAMES = /([^\s,]+)/g;
 function $args(func) {
-    return (func + '')
-        .replace(/[/][/].*$/mg, '') // strip single-line comments
-        .replace(/\s+/g, '') // strip white space
-        .replace(/[/][*][^/*]*[*][/]/g, '') // strip multi-line comments
-        .split('){', 1)[0].replace(/^[^(]*[(]/, '') // extract the parameters
-        .replace(/=[^,]+/g, '') // strip any ES6 defaults
-        .split(',').filter(Boolean); // split & filter [""]
+    var fnStr = func.toString().replace(STRIP_COMMENTS, '');
+    var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+    if(result === null)
+        result = [];
+    return result;
 }
+
 
 // Checks where a variable is a function
 function isFunction(func) {

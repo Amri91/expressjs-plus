@@ -1,5 +1,9 @@
 [![Build Status](https://travis-ci.org/Amri91/expressjs-plus.svg?branch=master)](https://travis-ci.org/Amri91/expressjs-plus)
 
+## Description
+The main feature of this library is the getMiddlewareVersion function which facilitates passing variables between middlewares
+seamlessly. A great feature of this library is that it allows its users to create their own handlers for passing variables.
+
 ## Usage
 ``` js
 var express = require('express');
@@ -83,7 +87,8 @@ npm install expressjs-plus
 <a name="new_ExpressPlus_new"></a>
 
 ### new exports.ExpressPlus(app, passedParamHandlers, passedErrorHandlers)
-This function abstracts the constraints of express middleware signature and allows you to easily pass variablesbetween middlewares without ugly code. It introduces a neat pattern for passing these variables.
+This function abstracts the constraints of express middleware signature and allows you to easily pass variables
+between middlewares without ugly code. It introduces a neat pattern for passing these variables.
 
 
 | Param | Type | Description |
@@ -110,7 +115,8 @@ Generic error handler
 <a name="ExpressPlus+getMiddlewareVersion"></a>
 
 ### expressPlus.getMiddlewareVersion ⇒
-Returns a middleware version of the function passed, this function replaces the last parameter with a callbackfunction to work with express js.
+Returns a middleware version of the function passed, this function replaces the last parameter with a callback
+function to work with express js.
 
 **Kind**: instance property of <code>[ExpressPlus](#ExpressPlus)</code>  
 **Returns**: function  
@@ -162,7 +168,8 @@ Handles responses. Other middlewares need to use locals to pass data to this fun
 <a name="ExpressPlus+defaultCbWithResponse"></a>
 
 ### expressPlus.defaultCbWithResponse(cb, [status])
-Handles callbacks and puts response & status in the second callback argument if successfulReplace your callback with this if appropriate.
+Handles callbacks and puts response & status in the second callback argument if successful
+Replace your callback with this if appropriate.
 
 **Kind**: instance method of <code>[ExpressPlus](#ExpressPlus)</code>  
 
@@ -174,7 +181,8 @@ Handles callbacks and puts response & status in the second callback argument if 
 <a name="ExpressPlus+defaultCb"></a>
 
 ### expressPlus.defaultCb(cb, [resource])
-Handles callbacks.Replace your callback with this if appropriate.
+Handles callbacks.
+Replace your callback with this if appropriate.
 
 **Kind**: instance method of <code>[ExpressPlus](#ExpressPlus)</code>  
 
@@ -197,11 +205,16 @@ Enables sending array of middlewares to app.use
 <a name="ExpressPlus..lastHandler"></a>
 
 ### ExpressPlus~lastHandler(param, paramsArray, req, res) ⇒ <code>boolean</code>
-Default parameter handler used in getMiddlewareVersion.Every parameter is passed to a set of functions to be handled, this is the last handler that just pushesthe parameter to the paramsArray.
+Default parameter handler used in getMiddlewareVersion.
+Every parameter is passed to a set of functions to be handled, this is the last handler that just pushes
+the parameter to the paramsArray.
 
 **Kind**: inner method of <code>[ExpressPlus](#ExpressPlus)</code>  
-**Returns**: <code>boolean</code> - if true is returned, the parameter will be considered handled and the function [GMV](GMV) willmove on to the next parameter. if false is returned, the next handler on the list will attempt to handle theparameter until this methods turn comes, which will always return true  
-**See**: [dataHandler](dataHandler) this function is a more real example of a parameter handler, it is used to integratewith another library [https://www.npmjs.com/package/simple-express-validator](https://www.npmjs.com/package/simple-express-validator)  
+**Returns**: <code>boolean</code> - if true is returned, the parameter will be considered handled and the function [GMV](GMV) will
+move on to the next parameter. if false is returned, the next handler on the list will attempt to handle the
+parameter until this methods turn comes, which will always return true  
+**See**: [dataHandler](dataHandler) this function is a more real example of a parameter handler, it is used to integrate
+with another library [https://www.npmjs.com/package/simple-express-validator](https://www.npmjs.com/package/simple-express-validator)  
 
 | Param | Type | Description |
 | --- | --- | --- |
