@@ -44,6 +44,31 @@ describe('#getMiddlewareVersion testing', function() {
             done();
         });
     });
+
+    it('should call ES6 function with correct parameters', function (done) {
+        var unsuspectingES6Function = (user, id, cb) => {
+            return cb(null, { response: {user: user, id: id}, status: 123 });
+        };
+        var userHandler = function(param, paramsArray, req, res){
+            if(param !== 'user') return false;
+            paramsArray.push(req.user);
+            return true;
+        };
+        var spy = sinon.spy(userHandler);
+
+        var spyForFunc = sinon.spy(unsuspectingES6Function);
+
+        var appPlus = new ExpressPlus(mockExpressApp(), [userHandler], []);
+
+        var mockedReq = mockReq();
+        var mockedRes = mockRes();
+        appPlus.GMV(unsuspectingES6Function)(mockedReq, mockedRes, function(){
+            mockedRes.locals.status.should.be.equal(123);
+            mockedRes.locals.response.user.should.be.equal("sup");
+            mockedRes.locals.response.id.should.be.equal(1);
+            done();
+        });
+    });
 });
 
 describe('#responder testing', function() {
