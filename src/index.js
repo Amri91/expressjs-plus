@@ -88,18 +88,16 @@ function mw(req, res, next){
      * @param {Promise} promise the promise to be converted
      * @return function
      * @example
-     ```js
-     function regularPromise = (someVar) => {
-     // you can use co as well
-     return co(function* (){
-        console.log(someVar);
-        return {response: someVar+="addedString"};
-     }
-    }
-     // middleware version of regularFunc
-     var func = GMVPromise(regularFunc);
+```js
+function regularPromise = (someVar) => {
+// you can use co as well
+    return new Promise((resolve, reject) => {
+        resolve({ response: {user: user, id: id}, status: 123 });
+    });
 }
-     ```
+// middleware version of regularFunc
+var func = GMVPromise(regularFunc);
+```
      */
     this.getMiddlewareVersionPromise =  this.GMVPromise = function(promise){
         let self = this;

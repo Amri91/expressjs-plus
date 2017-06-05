@@ -157,17 +157,15 @@ Similar to GMV @see [GMV](GMV) but accepts promises instead
 
 **Example**  
 ```js
-     function regularPromise = (someVar) => {
-     // you can use co as well
-     return co(function* (){
-        console.log(someVar);
-        return {response: someVar+="addedString"};
-     }
-    }
-     // middleware version of regularFunc
-     var func = GMVPromise(regularFunc);
+function regularPromise = (someVar) => {
+// you can use co as well
+    return new Promise((resolve, reject) => {
+        resolve({ response: {user: user, id: id}, status: 123 });
+    });
 }
-     ```
+// middleware version of regularFunc
+var func = GMVPromise(regularFunc);
+```
 <a name="ExpressPlus+setErrorHandlers"></a>
 
 ### expressPlus.setErrorHandlers()
