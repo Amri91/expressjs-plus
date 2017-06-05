@@ -1,6 +1,6 @@
 {
   "name": "expressjs-plus",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A pluggable expansion to express js aimed at adding much needed features and helpers.",
   "main": "index.js",
   "scripts": {
