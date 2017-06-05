@@ -84,6 +84,49 @@ function mw(req, res, next){
     };
 
     /**
+     * Similar to GMV @see {@link GMV} but accepts promises instead
+     * @param {Promise} promise the promise to be converted
+     * @return function
+     * @example
+     ```js
+     function regularPromise = (someVar) => {
+     // you can use co as well
+     return co(function* (){
+        console.log(someVar);
+        return {response: someVar+="addedString"};
+     }
+    }
+     // middleware version of regularFunc
+     var func = GMVPromise(regularFunc);
+}
+     ```
+     */
+    this.getMiddlewareVersionPromise =  this.GMVPromise = function(promise){
+        let self = this;
+        if (!isFunction(promise)) throw new Error('Non-function passed');
+        // takes all parameters except for the last one which is assumed to be the callback.
+        const params = $args(promise);
+        // the middleware version of the passed method
+        return function (req, res, next) {
+            let paramsArray = [];
+            // looping through every parameter except the callback
+            for (let i = 0; i < params.length; i++) {
+                // looping through every handler, breaking when a handler is successful
+                for (let j = 0; j < paramHandlers.length; j++) {
+                    if (paramHandlers[j](params[i], paramsArray, req, res)) break
+                }
+            }
+            // when the middleware is called in express, we're replacing it with this function
+            promise.apply(self, paramsArray)
+                .then(vars => {
+                    Object.assign(res.locals, vars);
+                    return next();
+                })
+                .catch(err => next(err));
+        }
+    };
+
+    /**
      * Handles responses. Other middlewares need to use locals to pass data to this function
      * @param {Object} req request object
      * @param {Object} res response object

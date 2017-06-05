@@ -76,6 +76,7 @@ npm install expressjs-plus
         * [.HTTPError](#ExpressPlus+HTTPError)
             * [new this.HTTPError(status, errCode)](#new_ExpressPlus+HTTPError_new)
         * [.getMiddlewareVersion](#ExpressPlus+getMiddlewareVersion) ⇒
+        * [.getMiddlewareVersionPromise](#ExpressPlus+getMiddlewareVersionPromise) ⇒
         * [.setErrorHandlers()](#ExpressPlus+setErrorHandlers)
         * [.responder(req, res, next)](#ExpressPlus+responder)
         * [.defaultCbWithResponse(cb, [status])](#ExpressPlus+defaultCbWithResponse)
@@ -142,6 +143,31 @@ function mw(req, res, next){
     return next();
 }
 ```
+<a name="ExpressPlus+getMiddlewareVersionPromise"></a>
+
+### expressPlus.getMiddlewareVersionPromise ⇒
+Similar to GMV @see [GMV](GMV) but accepts promises instead
+
+**Kind**: instance property of <code>[ExpressPlus](#ExpressPlus)</code>  
+**Returns**: function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| promise | <code>Promise</code> | the promise to be converted |
+
+**Example**  
+```js
+     function regularPromise = (someVar) => {
+     // you can use co as well
+     return co(function* (){
+        console.log(someVar);
+        return {response: someVar+="addedString"};
+     }
+    }
+     // middleware version of regularFunc
+     var func = GMVPromise(regularFunc);
+}
+     ```
 <a name="ExpressPlus+setErrorHandlers"></a>
 
 ### expressPlus.setErrorHandlers()
