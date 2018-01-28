@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/Amri91/expressjs-plus.svg?branch=master)](https://travis-ci.org/Amri91/expressjs-plus)
 
 ## Description
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Amri91/expressjs-plus.svg)](https://greenkeeper.io/)
 The main feature of this library is the getMiddlewareVersion function which facilitates passing variables between middlewares
 seamlessly. A great feature of this library is that it allows its users to create their own handlers for passing variables.
 
